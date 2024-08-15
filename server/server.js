@@ -11,6 +11,8 @@ const pool = new Pool({
 
 // Middleware para analizar el cuerpo de las solicitudes JSON
 app.use(express.json());
+
+// Servir archivos estáticos desde el directorio 'public'
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Función para ejecutar las consultas SQL
@@ -41,9 +43,6 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ mensaje: 'Error en la base de datos' });
   }
 });
-
-// Servir archivos estáticos desde el directorio 'public'
-app.use(express.static(path.join(__dirname, '../public')));
 
 // Inicia el servidor
 const port = process.env.PORT || 3000;
