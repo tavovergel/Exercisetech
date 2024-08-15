@@ -42,7 +42,7 @@ runQuery(createTableQuery)
   .catch(err => console.error('Error ejecutando la consulta:', err));
 
 // Endpoint para el login
-app.post('/api/login', async (req, res) => {
+app.post('https://exercisetech.vercel.app/', async (req, res) => {
   const { nombre_usuario, contrasena } = req.body;
   const query = `SELECT * FROM usuarios WHERE nombre_usuario = $1 AND contrasena = $2`;
 
