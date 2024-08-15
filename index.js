@@ -1,6 +1,6 @@
+// server.js
 const express = require('express');
 const { Pool } = require('pg');
-
 const app = express();
 
 // Configura la conexión a la base de datos
@@ -42,7 +42,7 @@ runQuery(createTableQuery)
   .catch(err => console.error('Error ejecutando la consulta:', err));
 
 // Endpoint para el login
-app.post('https://exercisetech.vercel.app/', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { nombre_usuario, contrasena } = req.body;
   const query = `SELECT * FROM usuarios WHERE nombre_usuario = $1 AND contrasena = $2`;
 

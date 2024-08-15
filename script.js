@@ -16,23 +16,34 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     console.log('Contraseña:', password);
 
     // Enviar los datos al servidor
-    // Ejemplo usando fetch
-    fetch("https://exercisetech.vercel.app/", {
+    fetch("/login", { // Asegúrate de que esta URL apunte a tu endpoint del servidor
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ nombre_usuario: username, contrasena: password }) // Asegúrate de que los nombres de los campos coincidan con los del servidor
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            // Redirigir o mostrar un mensaje de éxito
-            window.location.href = 'pagina-inicial.html';
-            messageElement.textContent = 'Inicio de sesión exitoso.';
+        const messageElement = document.getElementById('message');
+        if (response.ok) {
+            // Mostrar un mensaje de éxito
+            messageElement.className = 'alert alert-success';
+            messageElement.textContent = data.mensaje;
+            messageElement.style.display = 'block';
+            // Redirigir o realizar otras acciones aquí si es necesario
         } else {
-            alert(data.message);
+            // Mostrar un mensaje de error
+            messageElement.className = 'alert alert-danger';
+            messageElement.textContent = data.mensaje;
+            messageElement.style.display = 'block';
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        const messageElement = document.getElementById('message');
+        messageElement.className = 'alert alert-danger';
+        messageElement.textContent = 'Error en la solicitud';
+        messageElement.style.display = 'block';
+    });
 });
