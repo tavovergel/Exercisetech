@@ -8,6 +8,9 @@ const pool = new Pool({
   connectionString: "postgres://default:auWpQHirkM39@ep-still-morning-a57kqzah.us-east-2.aws.neon.tech:5432/verceldb?sslmode=require"
 });
 
+// Middleware para analizar el cuerpo de las solicitudes JSON
+app.use(express.json());
+
 // Función para ejecutar las consultas SQL
 async function runQuery(query) {
   const client = await pool.connect();
@@ -30,22 +33,21 @@ CREATE TABLE IF NOT EXISTS usuarios (
 INSERT INTO usuarios (nombre_usuario, contrasena)
 VALUES 
     ('user1', '12345'),
-    ('user2', '789456');
+    ('user2', '789456')
+ON CONFLICT (nombre_usuario) DO NOTHING;  // Evita errores si el usuario ya existe
 `;
 
 runQuery(createTableQuery)
   .then(() => console.log('Tabla usuarios creada e inicializada con datos'))
   .catch(err => console.error('Error ejecutando la consulta:', err));
 
-// Definir otros endpoints de la API aquí
-
-// Por ejemplo, un endpoint para el login
+// Endpoint para el login
 app.post('/api/login', async (req, res) => {
   const { nombre_usuario, contrasena } = req.body;
   const query = `SELECT * FROM usuarios WHERE nombre_usuario = $1 AND contrasena = $2`;
-  
+
   try {
-    const result = await runQuery({ text: query, values: [nombre_usuario, contrasena] });
+    const result = await pool.query({ text: query, values: [nombre_usuario, contrasena] });
     if (result.rows.length > 0) {
       res.json({ mensaje: 'Login exitoso', usuario: result.rows[0] });
     } else {
@@ -61,4 +63,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
-
